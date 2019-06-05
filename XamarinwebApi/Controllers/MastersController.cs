@@ -95,5 +95,36 @@ namespace XamarinwebApi.Controllers
             }
             return response;
         }
+
+        public Response DeleteEmployee(int EmployeeId)
+        {
+            Response response = new Response();
+            try
+            {
+                connection();
+                SqlCommand com = new SqlCommand("spDeleteEmployee", conn);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@EmployeeId", EmployeeId);
+                conn.Open();
+                int i = com.ExecuteNonQuery();
+                conn.Close();
+                if (i >= 1)
+                {
+                    response.Message = "Employee Deleted Successfully";
+                    response.Status = 1;
+                }
+                else
+                {
+                    response.Message = "Employee faild To Delete";
+                    response.Status = 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Status = 0;
+            }
+            return response;
+        }
     }
 }
